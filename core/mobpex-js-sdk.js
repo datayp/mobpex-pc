@@ -20,7 +20,7 @@ MobpexJsSDK.prototype = {
 
   _errorCallback: undefined,
   _successCallback: undefined,
-  _validatePrePayJson:function(prePayJson){
+  _validatePrePayJson:function(prePayJson){	
 	  var prePayJsonObj = {};
 	  if(typeof prePayJson == "string"){
 	      try{
@@ -108,7 +108,7 @@ MobpexJsSDK.prototype = {
 	  
       return true;
   },
-  letsPay: function(prePay_json,successCallBack,errorCallBack,winRef) {
+  letsPay: function(prePay_json,successCallBack,errorCallBack) {
 	  this._errorCallback=errorCallBack;
 	  this._successCallback=successCallBack
     var paymentsJson;
@@ -132,6 +132,7 @@ MobpexJsSDK.prototype = {
     var result = paymentsJson['result'];
     
     if (channel==channels.alipay  && this._is_weixin()) {  
+<<<<<<< HEAD:core/mobpex-js-sdk-pc.js
     	_AP.pay(result.paymentParams.transUrl);
       return;
     }else  if (channel==channels.wechat){
@@ -150,6 +151,18 @@ MobpexJsSDK.prototype = {
     	//2016-07-04 某些浏览器有安全机制，会阻止在回调函数里使用window.open，为了绕开此机制，先打开一个空窗口，之后再在回调函数里设置它的location
 
     	winRef.location = result.paymentParams.transUrl;
+=======
+    	//console.log(result.paymentParams.transUrl);
+    	_AP.pay(result.paymentParams.transUrl);
+      return;
+    }else  if (channel==channels.wechat){
+    	    	this._wechatPayInWechat(paymentsJson);
+    	      return;
+    }
+    else  {  
+    	//console.log(result.paymentParams.transUrl);
+    	window.location=result.paymentParams.transUrl;
+>>>>>>> origin/master:core/mobpex-js-sdk.js
       return;
     }
     
