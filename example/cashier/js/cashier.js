@@ -9,9 +9,15 @@
 功能描述：厦航收银台JS
 ==============================*/
 window.onload=function(){
-
+	document.getElementById("codeUrl").value = "";
+	
   var closeBtn = document.getElementById("closeBtn"),
       commodityInfor = document.getElementById("commodityInfor"),
+      paylist = document.querySelector(".paylist"),
+      js_pay = document.getElementById("js_pay"),
+      js_weixingpay = document.getElementById("js_weixingpay"),
+      js_weixingcon = document.getElementById("js_weixingcon"),
+      js_otherpay = document.getElementById("js_otherpay"),
       openHtml = '展开详情 <i class="iconfont">&#xe602;</i>',
       closeHtml = '收起详情 <i class="iconfont">&#xe601;</i>';
   EventUtil.addHandler(closeBtn,"click",function(event){//展开详情
@@ -23,15 +29,7 @@ window.onload=function(){
       closeBtn.innerHTML=openHtml;
     };
   });
-//  var opr={
-//    title:'支付结果',
-//    yesBtn:"支付成功",
-//    noBtn:"重新选择支付方式",
-//    ok:function(){
-//      console.log(222);
-//    }
-//   };
-//   dialog(opr);
+  
   
   var initParam = {//初始化页面参数
 			"orderInfo" : {// 订单信息
@@ -40,7 +38,16 @@ window.onload=function(){
 			},
 			"merchantUrl" : "https://www.mobpex.com"//商户url
 		};
-  loadOrder(initParam, submitPay);
+ 
+    	  loadOrder(initParam, submitPay);
+
+  EventUtil.addHandler(js_otherpay,"click",function(event){//选择其它支付方式
+    js_weixingcon.style.display = "none";
+    js_pay.style.display = "block";
+  });
+
+ 
+  
 
 };
 //-------------------------------------------------------------------------------------------------------------------
@@ -76,10 +83,10 @@ function dialog(opr) {
                 + noBtn
                 + '</button></footer></div>'
                 +'<div class="modal-backdrop fade in"></div>';
- var lastDiv = document.createElement("div");
+  var lastDiv = document.createElement("div");
   document.body.appendChild(lastDiv);
   lastDiv.innerHTML = dialogHtml;
-  // $(dialogHtml).appendTo("body").show();
+  // document.body.appendHTML(dialogHtml);
   var dialogue = document.querySelector(".dialogue"),
       modalBackdrop = document.querySelector(".modal-backdrop");
   EventUtil.addHandler(dialogue,"click",function(event){//否
@@ -87,77 +94,72 @@ function dialog(opr) {
     var target = EventUtil.getTarget(event);
     switch(target.getAttribute("id")){
       case "YDialog"://是
+        
+    	  var queryPaymentUrl= "../demo/queryPaymentOrderForPc";
+  		var postBody = encodeURI("payType=&payChannel=&orderNo=");
+  		var xhr = new XMLHttpRequest();
+  		xhr.open("POST", queryPaymentUrl, true);
+  		xhr.setRequestHeader("Content-type",
+  				"application/x-www-form-urlencoded;charset=utf-8");
+  		xhr.send(postBody);
 
-    		var queryPaymentUrl= "../demo/queryPaymentOrderForPc";
-    		var postBody = encodeURI("payType=&payChannel=&orderNo=");
-    		var xhr = new XMLHttpRequest();
-    		xhr.open("POST", queryPaymentUrl, true);
-    		xhr.setRequestHeader("Content-type",
-    				"application/x-www-form-urlencoded;charset=utf-8");
-    		xhr.send(postBody);
-
-    		xhr.onreadystatechange = function() {
-    			if (xhr.readyState == 4 && xhr.status == 200) {
-    				var queryJsonObject = JSON.parse(xhr.responseText);
-    				if (queryJsonObject.state != 'SUCCESS') {
-    					
-    					if (hasProperty.call(queryJsonObject, "error")
-    							&& hasProperty.call(queryJsonObject.error, "code")) {
-    						endWait();// 关闭等待UI的显示
-    						errorCallBack("您并未完成支付!错误码" + queryJsonObject.error.code);
-    					} else {
-    						endWait();// 关闭等待UI的显示
-    						errorCallBack("您并未完成支付!");
-    					}
-    					return;
-    				} else {
-    					
-    					//mobpexJsSdk.letsPay(xhr.responseText, successCallBack2,errorCallBack);
-    					var paymentsJson;
-    					if(typeof xhr.responseText == "string"){
-    					      try{
-    					           paymentsJson = JSON.parse(xhr.responseText);
-    					      }catch(err){
-    					        this._errorCallback("fail",  "json_fail");
-    					        return;
-    					      }
-    					}else{
-    					         paymentsJson = xhr.responseText;
-    					}
-    					
-    					var result = paymentsJson['result'];
-    				    
-    				    if (result.payStatus!="PAID") {  
-    				    	
-    				    	alert("您尚未完成支付，请选择一个支付方式完成支付");
-    				    }
-    				    else{
-    				    	successCallBack2();
-    				    }
-    					
-    					endWait();// 关闭等待UI的显示
-    				}
-    			} else if (xhr.readyState == 4) {
-    				console.log(submitPayUrl);
-    				console.log(xhr.status);
-    				console.log(xhr.responseText);
-    				endWait();// 关闭等待UI的显示
-    				errorCallBack("获取支付凭证失败!");
-    				return;
-    			}
-    			
-    			
-    			dialogue.parentNode.removeChild(dialogue);
-    	        modalBackdrop.parentNode.removeChild(modalBackdrop);
-    	        if(opr.ok != undefined ){
-    	          opr.ok();
-    	        }
-    	         
-    		};
-    		break; 
+  		xhr.onreadystatechange = function() {
+  			if (xhr.readyState == 4 && xhr.status == 200) {
+  				var queryJsonObject = JSON.parse(xhr.responseText);
+  				if (queryJsonObject.state != 'SUCCESS') {
+  					
+  					if (hasProperty.call(queryJsonObject, "error")
+  							&& hasProperty.call(queryJsonObject.error, "code")) {
+  						endWait();// 关闭等待UI的显示
+  						errorCallBack("您并未完成支付!错误码" + queryJsonObject.error.code);
+  					} else {
+  						endWait();// 关闭等待UI的显示
+  						errorCallBack("您并未完成支付!");
+  					}
+  					return;
+  				} else {
+  					
+  					//mobpexJsSdk.letsPay(xhr.responseText, successCallBack2,errorCallBack);
+  					var paymentsJson;
+  					if(typeof xhr.responseText == "string"){
+  					      try{
+  					           paymentsJson = JSON.parse(xhr.responseText);
+  					      }catch(err){
+  					        this._errorCallback("fail",  "json_fail");
+  					        return;
+  					      }
+  					}else{
+  					         paymentsJson = xhr.responseText;
+  					}
+  					
+  					var result = paymentsJson['result'];
+  				    
+  				    if (result.payStatus!="PAID") {  
+  				    	
+  				    	alert("您尚未完成支付，请选择一个支付方式完成支付");
+  				    }
+  				    else{
+  				    	successCallBack2();
+  				    }
+  					
+  					endWait();// 关闭等待UI的显示
+  				}
+  			} else if (xhr.readyState == 4) {
+  				endWait();// 关闭等待UI的显示
+  				errorCallBack("获取支付凭证失败!");
+  				return;
+  			}
+  			
+  			
+  			dialogue.parentNode.removeChild(dialogue);
+  	        modalBackdrop.parentNode.removeChild(modalBackdrop);
+  	        if(opr.ok != undefined ){
+  	          opr.ok();
+  	        }
+  	         
+  		};
+  		break; 
     	  
-    	  
-          
       case "NDialog"://否
       case "btnClose"://关闭
         dialogue.parentNode.removeChild(dialogue);
@@ -169,6 +171,7 @@ function dialog(opr) {
     }   
   }); 
 };
+
 
 //-------------------------------------------------------------------------------------------------------------------
 // 跨浏览器的事件、事件对象处理程序
@@ -213,3 +216,15 @@ var EventUtil={//
     }
   }
 };
+
+
+//-------------------------------------------------------------------------------------------------------------------
+// appendHTML方法
+//-------------------------------------------------------------------------------------------------------------------
+HTMLElement.prototype.appendHTML = function(htmlStr){
+  var fragment = document.createDocumentFragment();
+  var htmlNode = document.createElement("div");
+  htmlNode.innerHTML = htmlStr;
+  // for (var i=0; i< htmlNode ; i++){}
+
+}

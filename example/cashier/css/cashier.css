@@ -164,10 +164,14 @@ a img {
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
+.icon-fanhui:before { content: "\e605"; }
 .icon-cuowu:before { content: "\e603"; }
 .icon-fold:before { content: "\e601"; }
 .icon-unfold:before { content: "\e602"; }
+.icon-saoyisao:before { content: "\e600"; }
 .icon-dui-copy:before { content: "\e604"; }
+
+
 
 
 
@@ -182,20 +186,35 @@ nav{
 	border-bottom: 1px solid #EBEBEB;
 	padding:15px 0 22px;
 }
+nav .logo{
+  display: inline-block;
+  float: left;
+}
 .page-title{
 	font-size: 22px;
 	color: #999;
 	border-left:1px solid #ccc;
 	padding-left: 10px;
+  display: inline-block;
+  margin-top: 4px;
 }
 .order-status,
-.order-pay{
+.order-pay,
+.weixing{
 	border:1px solid #EBEBEB;
 	padding: 30px;
 	margin-top:30px;
 	width: 1000px;
 	margin: 0 auto;
 	margin-top:30px;
+}
+.weixing{
+  display: none;
+}
+.weixing:after{
+  content: "";
+  display: block;
+  clear: both;
 }
 .order-status:after{
 	content: "";
@@ -260,6 +279,7 @@ nav{
 }
 .paylist li:hover{
   border: 1px solid #d1d1d1;
+  cursor: pointer;
 }
 .sucess{
 	color: #489F34
@@ -267,7 +287,56 @@ nav{
 h4,h5{
 	font-weight: 500;
 }
+.weixing > h5 >.right{
+  float: right;
+  cursor: pointer;
+}
+.weixing-pay{
+  width: 433px;
+  margin: 0 auto;
+  margin-top: 36px;
+  margin-bottom: 48px;
+}
+.weixing-pay:after{
+  content: "";
+  display: block;
+  clear:both;
+}
+.weixing-pay >.left{
+  width: 182px;
+  float: left;
+  border: 1px solid #CBCBCB;
+  padding: 8px 6px;
+  margin-top:18px;
+}
 
+.weixing-pay >.right{
+  width: 219px;
+  float: left;
+  padding-left: 32px;
+}
+.icop{
+  margin-top: 10px;
+}
+.icop > .iconfont{
+  float: left;
+  font-size: 26px;
+  color: #FF780C;
+  margin-right: 16px;
+  margin-left: 14px;
+}
+.icop >p{
+  float: left;
+  margin-top: -4px;
+}
+b.red{
+  color: #F20001;
+}
+.weixing-msg{
+  clear: both;
+  text-align:center;
+  margin-top: 30px;
+}
 /*-------------------------------------------------------------------------------------------------------------------
 弹出框组件
 -------------------------------------------------------------------------------------------------------------------*/
@@ -299,7 +368,7 @@ h4,h5{
   color: #999;
 }
 .dialogue >article > .dialogue-body{
-  padding: 25px;
+  padding: 20px;
   text-align: center;
 }
 .dialogue > footer.dialogue-footer{

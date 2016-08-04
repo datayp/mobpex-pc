@@ -132,19 +132,23 @@ MobpexJsSDK.prototype = {
     var result = paymentsJson['result'];
     
     if (channel==channels.alipay  && this._is_weixin()) {  
-    	console.log(result.paymentParams.transUrl);
     	_AP.pay(result.paymentParams.transUrl);
       return;
     }else  if (channel==channels.wechat){
-    	    	console.log(paymentsJson);
-    	    	this._wechatPayInWechat(paymentsJson);
+    	    	
+    	    	//2016-07-15 微信扫码支付  生成二维码
+    	    		var codeUrlTemp = result.paymentParams.codeUrl;
+    	    		document.getElementById("codeUrl").value = codeUrlTemp;
+    	    	   qr(codeUrlTemp);
+    	    	   
+
     	      return;
     }
-    else  {  
-    	console.log(result.paymentParams.transUrl);
+    else  {
     	//window.location=result.paymentParams.transUrl;
     	//window.open(result.paymentParams.transUrl,"_blank");
     	//2016-07-04 某些浏览器有安全机制，会阻止在回调函数里使用window.open，为了绕开此机制，先打开一个空窗口，之后再在回调函数里设置它的location
+
     	winRef.location = result.paymentParams.transUrl;
       return;
     }

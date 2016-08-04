@@ -3,7 +3,7 @@
 
 ### 简介
 
-​        WEB站点商户、微信公众号商户可通过PC网页 SDK 接入支付宝PC网页支付、银联PC网页支付、易宝PC网页支付等。
+​        WEB站点商户、微信公众号商户可通过PC网页 SDK 接入支付宝PC网页支付、银联PC网页支付、易宝PC网页支付、京东支付等。
 
 ### 安装
 
@@ -15,24 +15,27 @@
 
     {//初始化PC收银台页面参数
     	"orderInfo" : {                           // 订单信息
-    		"orderNo" : "199810112011",           //商户订单号
-    		"productName" : "商品名称",            //商品名称
-    		"productDescription" : "商品描述",     //商品描述
-    		"amount" : "0.01",                    //商品金额
-    		"payee" : "湖南易宝天创数据服务有限公司",  //收款方 
-    		"submitPayUrl" : "../demo/submitOrderForPc"//提交支付请求url
-    		//此url为商户url，商户后台在收到此地址的请求后调用server SDK获取支付凭证并作为响应返回。        
-    	},
-    	"channel" : [ 
-    		{"payChannel":"ALIPAY","payType":"WEB"}, 
-    		{"payChannel":"YEEPAY","payType":"WEB"}, 
-    		{"payChannel":"UPACP","payType":"WEB"}
-    	]
-    	//收银台可选支付渠道列表，payChannel和payType取值范围为APP可用支付渠道列表接口列出的channelCode和type组合
-    	,"merchantUrl" : "https://www.mysite.com/myOrder"  //用户点击收银台返回按钮后跳转的地址
-    }
+			"orderNo" : "199810112011",           //商户订单号		
+			"submitPayUrl" : "../demo/submitOrderForPc"//提交支付请求url
+			//此url为商户url，商户后台在收到此地址的请求后调用server SDK获取支付凭证并作为
+			//响应返回。        
+		},
+		
+		//收银台可选支付渠道列表，payChannel和payType取值范围为APP可用支付渠道列表接口
+		//列出的channelCode和type组合
+		"merchantUrl" : "https://www.mysite.com/myOrder"  //用户点击收银台返回按钮后跳转的地址    }
+
+设置页面属性
 
 
+设置页面几种支付方式的属性(见pcPay.html)
+             5个支付方式，可采用5个图片元素（或其他元素如li）展示，每个元素都有data-value和payType属性，
+             易宝、支付宝、银联、微信、京东分别为
+             data-value="YEEPAY" payType="WEB" ;
+             data-value="ALIPAY" payType="WEB" ;
+             data-value="UPACP" payType="WEB" ;
+             data-value="WECHAT" payType="NATIVE"；
+             data-value="JDPAY" payType="WEB" .
 
 
 
